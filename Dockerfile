@@ -1,8 +1,11 @@
-FROM python:3.9-slim
-WORKDIR /app
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# … earlier steps installing dependencies …
+
+# Copy in your service code and weights
 COPY main.py .
 COPY BIM-Net++_HePIC.pth .
+
+# Expose nothing (serverless uses /run internally), but just to be safe:
 EXPOSE 8000
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "1"]
+
+# Start the serverless handler
+CMD ["python", "main.py"]
